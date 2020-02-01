@@ -1,10 +1,22 @@
-import React, { lazy, Suspense } from 'react';
+import React, { lazy, Suspense, useEffect } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import './styles.css';
-const DataTable = lazy(() => import('./DataTable'));
-const DataChart = lazy(() => import('./DataChart'));
+
+const ReactLazyPreload = importStatement => {
+  const Component = React.lazy(importStatement);
+  Component.preload = importStatement;
+  return Component;
+};
+
+const DataTable = ReactLazyPreload(() => import('./DataTable'));
+const DataChart = ReactLazyPreload(() => import('./DataChart'));
 
 export default function App() {
+  useEffect(() => {
+    setTimeout(() => {
+      DataChart.preload();
+    }, 3000);
+  }, []);
   return (
     <BrowserRouter>
       <div className='App'>
