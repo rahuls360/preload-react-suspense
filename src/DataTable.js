@@ -36,12 +36,20 @@ const DataTable = props => {
       key: 'company'
     }
   ];
-
+  console.log(props.preloadChart, 'inside');
   return (
     <Table
       dataSource={dataSource}
       columns={columns}
-      onRowClick={rec => props.history.push(`/data/${rec.key}`)}
+      onRow={rec => {
+        return {
+          onClick: () => props.history.push(`/data/${rec.key}`),
+          onMouseEnter: () => {
+            console.log('onhover');
+            props.preloadChart();
+          }
+        };
+      }}
     />
   );
 };
